@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Talent Intelligence Platform | AI-Powered Hiring</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- Styles -->
+<link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+</head>
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<header class="navbar">
+  <div class="navbar-inner">
+    <div class="brand">
+      <span class="brand-mark"><i class="fa-solid fa-radar"></i></span>
+      <span class="brand-name">Talentry<span class="brand-dot">.ai</span></span>
+    </div>
+    <nav class="navbar-links">
+      <a href="#upload-section">Analyze</a>
+      <a href="#dashboard-section">Dashboard</a>
+      <a href="#footer">About</a>
+    </nav>
+    <div class="navbar-cta">
+      <span class="status-pill"><span class="status-dot"></span> Model Online</span>
+    </div>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <span class="eyebrow"><i class="fa-solid fa-sparkles"></i> AI Talent Intelligence</span>
+    <h1 class="hero-title">Know who to hire<br> before the interview.</h1>
+    <p class="hero-subtitle">
+      Upload a resume, paste a job description, and let the model score fit,
+      surface skill gaps, and predict hiring outcomes in seconds.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-value">0.2s</span>
+        <span class="hero-stat-label">Avg. parse time</span>
+      </div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat">
+        <span class="hero-stat-value">RF</span>
+        <span class="hero-stat-label">Random Forest engine</span>
+      </div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat">
+        <span class="hero-stat-value">100%</span>
+        <span class="hero-stat-label">Explainable output</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= UPLOAD SECTION ================= -->
+<section class="upload-section" id="upload-section">
+  <div class="section-inner">
+
+    <form id="analyze-form" method="post" action="/analyze" enctype="multipart/form-data">
+      <div class="upload-grid">
+
+        <!-- Resume Upload Card -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-icon"><i class="fa-solid fa-file-arrow-up"></i></div>
+            <div>
+              <h3>Candidate Resume</h3>
+              <p>PDF or DOCX, up to 10MB</p>
+            </div>
+          </div>
+
+          <label for="resume-input" class="dropzone" id="dropzone">
+            <input type="file" id="resume-input" name="resume" accept=".pdf,.doc,.docx" hidden required>
+            <div class="dropzone-icon">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+            </div>
+            <p class="dropzone-title">Drag &amp; drop resume here</p>
+            <p class="dropzone-subtitle">or <span class="dropzone-browse">browse files</span> from your computer</p>
+            <div class="dropzone-file" id="dropzone-file">
+              <i class="fa-solid fa-file-lines"></i>
+              <span id="dropzone-filename">No file selected</span>
+              <button type="button" class="dropzone-remove" id="dropzone-remove" aria-label="Remove file">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          </label>
+        </div>
+
+        <!-- Job Description Card -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-icon panel-icon-alt"><i class="fa-solid fa-briefcase"></i></div>
+            <div>
+              <h3>Job Description</h3>
+              <p>Paste the role requirements &amp; responsibilities</p>
+            </div>
+          </div>
+
+          <div class="textarea-wrap">
+            <textarea
+              id="jd-input"
+              name="job_description"
+              placeholder="e.g. We're looking for a Senior Backend Engineer with 5+ years of experience in Python, FastAPI, distributed systems, and cloud infrastructure (AWS/GCP)..."
+              required></textarea>
+            <span class="textarea-counter"><span id="jd-count">0</span> characters</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="analyze-bar">
+        <div class="analyze-hint">
+          <i class="fa-solid fa-shield-halved"></i>
+          Resumes are parsed securely and never stored beyond this session.
+        </div>
+        <button type="submit" class="btn-analyze" id="analyze-btn">
+          <span class="btn-analyze-content">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            Analyze Resume
+          </span>
+          <span class="btn-analyze-loading">
+            <span class="spinner"></span>
+            Analyzing…
+          </span>
+        </button>
+      </div>
+    </form>
+
+  </div>
+</section>
+
+<!-- ================= DASHBOARD (RESULTS) ================= -->
+{% if resume %}
+<section class="dashboard-section" id="dashboard-section">
+  <div class="section-inner">
+
+    <div class="dashboard-heading">
+      <div>
+        <span class="eyebrow eyebrow-dark"><i class="fa-solid fa-chart-simple"></i> Analysis Complete</span>
+        <h2>Candidate Intelligence Report</h2>
+      </div>
+      <button class="btn-secondary" onclick="window.print()">
+        <i class="fa-solid fa-download"></i> Export Report
+      </button>
+    </div>
+
+    <div class="dashboard-grid">
+
+      <!-- Candidate Details -->
+      <div class="card card-candidate">
+        <div class="card-header">
+          <div class="card-icon icon-blue"><i class="fa-solid fa-user"></i></div>
+          <h3>Candidate Details</h3>
+        </div>
+        <div class="candidate-profile">
+          <div class="candidate-avatar">{{ resume.name[0]|upper if resume.name else "?" }}</div>
+          <div class="candidate-info">
+            <h4>{{ resume.name or "Unknown Candidate" }}</h4>
+            <p class="candidate-meta"><i class="fa-solid fa-envelope"></i> {{ resume.email or "Not found" }}</p>
+            <p class="candidate-meta"><i class="fa-solid fa-phone"></i> {{ resume.phone or "Not found" }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resume Score -->
+      <div class="card card-score">
+        <div class="card-header">
+          <div class="card-icon icon-amber"><i class="fa-solid fa-gauge-high"></i></div>
+          <h3>Resume Score</h3>
+        </div>
+        <div class="score-display">
+          <span class="score-value" data-score="{{ scores.overall_score }}">{{ scores.overall_score }}</span>
+          <span class="score-max">/ 100</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="score-progress-fill" style="width:0%;" data-target="{{ scores.overall_score }}"></div>
+        </div>
+        <p class="score-label" id="score-label">Match quality</p>
+      </div>
+
+      <!-- Hiring Prediction -->
+      <div class="card card-prediction">
+        <div class="card-header">
+          <div class="card-icon icon-green"><i class="fa-solid fa-brain"></i></div>
+          <h3>Hiring Prediction</h3>
+        </div>
+
+        <div class="prediction-body">
+          <div class="ring-wrap">
+            <svg class="score-ring" viewBox="0 0 120 120">
+              <circle class="ring-track" cx="60" cy="60" r="52"></circle>
+              <circle class="ring-progress" id="prediction-ring" cx="60" cy="60" r="52"
+                data-target="{{ prediction.selection_probability }}"></circle>
+            </svg>
+            <div class="ring-center">
+              <span class="ring-value" id="ring-value">0%</span>
+              <span class="ring-caption">probability</span>
+            </div>
+          </div>
+
+          <div class="prediction-meta">
+            <span class="prediction-tag {{ 'tag-positive' if prediction.prediction == 'Selected' or prediction.prediction == 1 or prediction.prediction == 'Yes' else 'tag-neutral' }}">
+              <i class="fa-solid fa-circle-check"></i>
+              {{ prediction.prediction }}
+            </span>
+            <p>Selection probability based on Random Forest model trained on historical hiring outcomes.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Matched Skills -->
+      <div class="card card-skills">
+        <div class="card-header">
+          <div class="card-icon icon-green"><i class="fa-solid fa-check-double"></i></div>
+          <h3>Matched Skills</h3>
+          <span class="card-count">{{ match.matched_skills|length }}</span>
+        </div>
+        <div class="badge-list">
+          {% for skill in match.matched_skills %}
+          <span class="badge badge-matched"><i class="fa-solid fa-check"></i> {{ skill }}</span>
+          {% else %}
+          <p class="empty-note">No matched skills found.</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Missing Skills -->
+      <div class="card card-skills">
+        <div class="card-header">
+          <div class="card-icon icon-red"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <h3>Missing Skills</h3>
+          <span class="card-count">{{ match.missing_skills|length }}</span>
+        </div>
+        <div class="badge-list">
+          {% for skill in match.missing_skills %}
+          <span class="badge badge-missing"><i class="fa-solid fa-xmark"></i> {{ skill }}</span>
+          {% else %}
+          <p class="empty-note">No gaps detected. Full coverage.</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- AI Recruiter Summary -->
+      <div class="card card-summary">
+        <div class="card-header">
+          <div class="card-icon icon-blue"><i class="fa-solid fa-robot"></i></div>
+          <h3>AI Recruiter Summary</h3>
+        </div>
+        <div class="summary-body">
+          <p>{{ summary }}</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer" id="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="brand-mark"><i class="fa-solid fa-radar"></i></span>
+      <span class="brand-name">Talentry<span class="brand-dot">.ai</span></span>
+    </div>
+    <p class="footer-text">AI-powered resume intelligence for modern hiring teams.</p>
+    <div class="footer-links">
+      <a href="#"><i class="fa-brands fa-github"></i></a>
+      <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+      <a href="#"><i class="fa-solid fa-envelope"></i></a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 Talentry.ai — Built with FastAPI &amp; Random Forest ML.</p>
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  /* ---------- Drag & Drop Upload ---------- */
+  const dropzone = document.getElementById('dropzone');
+  const fileInput = document.getElementById('resume-input');
+  const fileNameEl = document.getElementById('dropzone-filename');
+  const fileDisplay = document.getElementById('dropzone-file');
+  const removeBtn = document.getElementById('dropzone-remove');
+
+  function showFile(file) {
+    if (!file) return;
+    fileNameEl.textContent = file.name;
+    fileDisplay.classList.add('active');
+    dropzone.classList.add('has-file');
+  }
+
+  fileInput.addEventListener('change', function () {
+    if (fileInput.files.length) showFile(fileInput.files[0]);
+  });
+
+  ['dragenter', 'dragover'].forEach(evt => {
+    dropzone.addEventListener(evt, function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      dropzone.classList.add('dragging');
+    });
+  });
+
+  ['dragleave', 'drop'].forEach(evt => {
+    dropzone.addEventListener(evt, function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      dropzone.classList.remove('dragging');
+    });
+  });
+
+  dropzone.addEventListener('drop', function (e) {
+    const files = e.dataTransfer.files;
+    if (files.length) {
+      fileInput.files = files;
+      showFile(files[0]);
+    }
+  });
+
+  removeBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    fileInput.value = '';
+    fileDisplay.classList.remove('active');
+    dropzone.classList.remove('has-file');
+  });
+
+  /* ---------- Character Counter ---------- */
+  const jdInput = document.getElementById('jd-input');
+  const jdCount = document.getElementById('jd-count');
+  if (jdInput) {
+    jdInput.addEventListener('input', function () {
+      jdCount.textContent = jdInput.value.length;
+    });
+  }
+
+  /* ---------- Analyze Button Loading State ---------- */
+  const form = document.getElementById('analyze-form');
+  const analyzeBtn = document.getElementById('analyze-btn');
+  if (form) {
+    form.addEventListener('submit', function () {
+      analyzeBtn.classList.add('is-loading');
+      analyzeBtn.disabled = true;
+    });
+  }
+
+  /* ---------- Animate Score Progress Bar ---------- */
+  const progressFill = document.getElementById('score-progress-fill');
+  const scoreLabel = document.getElementById('score-label');
+  if (progressFill) {
+    const target = parseFloat(progressFill.dataset.target) || 0;
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        progressFill.style.width = Math.min(target, 100) + '%';
+      }, 200);
+    });
+    if (target >= 80) scoreLabel.textContent = 'Excellent match quality';
+    else if (target >= 60) scoreLabel.textContent = 'Strong match quality';
+    else if (target >= 40) scoreLabel.textContent = 'Moderate match quality';
+    else scoreLabel.textContent = 'Low match quality';
+  }
+
+  /* ---------- Animate Prediction Ring ---------- */
+  const ring = document.getElementById('prediction-ring');
+  const ringValue = document.getElementById('ring-value');
+  if (ring) {
+    let target = parseFloat(ring.dataset.target) || 0;
+    // Normalize: accept either 0-1 or 0-100 input
+    if (target <= 1) target = target * 100;
+    target = Math.max(0, Math.min(target, 100));
+
+    const radius = 52;
+    const circumference = 2 * Math.PI * radius;
+    ring.style.strokeDasharray = circumference;
+    ring.style.strokeDashoffset = circumference;
+
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        const offset = circumference - (target / 100) * circumference;
+        ring.style.strokeDashoffset = offset;
+
+        let current = 0;
+        const duration = 900;
+        const startTime = performance.now();
+        function tick(now) {
+          const progress = Math.min((now - startTime) / duration, 1);
+          current = progress * target;
+          ringValue.textContent = Math.round(current) + '%';
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }, 250);
+    });
+  }
+
+  /* ---------- Smooth Scroll to Dashboard on Load ---------- */
+  {% if resume %}
+  const dashboardSection = document.getElementById('dashboard-section');
+  if (dashboardSection) {
+    setTimeout(() => {
+      dashboardSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 300);
+  }
+  {% endif %}
+
+});
+</script>
+
+</body>
+</html>
