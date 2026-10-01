@@ -1,30 +1,77 @@
+# =========================
 # Python
+# =========================
+
 __pycache__/
 *.py[cod]
 *.pyo
 
+# =========================
 # Virtual Environment
+# =========================
+
 .venv/
 venv/
 env/
 
-# Environment Variables
-.env
+# =========================
+# Environment / Secrets
+# =========================
 
+.env
+.env.*
+!.env.example
+
+# =========================
 # IDE
+# =========================
+
 .vscode/
 .idea/
 
-# Jupyter
-.ipynb_checkpoints/
+# =========================
+# OS
+# =========================
 
-# OS Files
 .DS_Store
 Thumbs.db
 
-# Model Files (optional, if very large)
-*.pkl
+# =========================
+# Uploaded Files
+# =========================
 
-# Build
-dist/
+uploads/
+
+# =========================
+# Generated / Temporary Data
+# =========================
+
+data/processed/
+
+# =========================
+# Logs
+# =========================
+
+*.log
+
+# =========================
+# Python Packaging
+# =========================
+
 build/
+dist/
+*.egg-info/
+
+# =========================
+# Testing / Coverage
+# =========================
+
+.pytest_cache/
+.coverage
+htmlcov/
+
+# =========================
+# Jupyter
+# =========================
+
+.ipynb_checkpoints/

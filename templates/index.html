@@ -1,423 +1,895 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Talent Intelligence Platform | AI-Powered Hiring</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <title>TalentIQ — AI Recruiter</title>
 
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<!-- Styles -->
-<link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
 </head>
+
 <body>
 
-<!-- ================= NAVBAR ================= -->
-<header class="navbar">
-  <div class="navbar-inner">
-    <div class="brand">
-      <span class="brand-mark"><i class="fa-solid fa-radar"></i></span>
-      <span class="brand-name">Talentry<span class="brand-dot">.ai</span></span>
-    </div>
-    <nav class="navbar-links">
-      <a href="#upload-section">Analyze</a>
-      <a href="#dashboard-section">Dashboard</a>
-      <a href="#footer">About</a>
+<div class="app-shell">
+
+    <!-- ============================================= -->
+    <!-- NAVBAR -->
+    <!-- ============================================= -->
+
+    <nav class="navbar">
+
+        <div class="brand">
+            <div class="brand-mark">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <div>
+                <div class="brand-name">TalentIQ</div>
+                <div class="brand-subtitle">AI RECRUITER</div>
+            </div>
+        </div>
+
+        <div class="nav-status">
+            <span class="status-dot"></span>
+            AI SYSTEM ONLINE
+        </div>
+
     </nav>
-    <div class="navbar-cta">
-      <span class="status-pill"><span class="status-dot"></span> Model Online</span>
-    </div>
-  </div>
-</header>
 
-<!-- ================= HERO ================= -->
-<section class="hero">
-  <div class="hero-glow"></div>
-  <div class="hero-inner">
-    <span class="eyebrow"><i class="fa-solid fa-sparkles"></i> AI Talent Intelligence</span>
-    <h1 class="hero-title">Know who to hire<br> before the interview.</h1>
-    <p class="hero-subtitle">
-      Upload a resume, paste a job description, and let the model score fit,
-      surface skill gaps, and predict hiring outcomes in seconds.
-    </p>
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <span class="hero-stat-value">0.2s</span>
-        <span class="hero-stat-label">Avg. parse time</span>
-      </div>
-      <div class="hero-stat-divider"></div>
-      <div class="hero-stat">
-        <span class="hero-stat-value">RF</span>
-        <span class="hero-stat-label">Random Forest engine</span>
-      </div>
-      <div class="hero-stat-divider"></div>
-      <div class="hero-stat">
-        <span class="hero-stat-value">100%</span>
-        <span class="hero-stat-label">Explainable output</span>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- ================= UPLOAD SECTION ================= -->
-<section class="upload-section" id="upload-section">
-  <div class="section-inner">
+    <!-- ============================================= -->
+    <!-- HERO -->
+    <!-- ============================================= -->
 
-    <form id="analyze-form" method="post" action="/analyze" enctype="multipart/form-data">
-      <div class="upload-grid">
+    <main>
 
-        <!-- Resume Upload Card -->
-        <div class="panel-card">
-          <div class="panel-header">
-            <div class="panel-icon"><i class="fa-solid fa-file-arrow-up"></i></div>
-            <div>
-              <h3>Candidate Resume</h3>
-              <p>PDF or DOCX, up to 10MB</p>
+        {% if not analysis_complete %}
+
+        <section class="hero">
+
+            <div class="hero-glow glow-one"></div>
+            <div class="hero-glow glow-two"></div>
+
+            <div class="hero-content">
+
+                <div class="eyebrow">
+                    <span class="eyebrow-line"></span>
+                    AI-POWERED TALENT INTELLIGENCE
+                </div>
+
+                <h1>
+                    Turn resumes into
+                    <span>recruiter intelligence.</span>
+                </h1>
+
+                <p class="hero-description">
+                    Analyze candidate evidence, understand role alignment,
+                    and generate personalized interview questions using
+                    semantic search and agentic AI.
+                </p>
+
+                <div class="capability-row">
+
+                    <div class="capability">
+                        <span>01</span>
+                        Semantic Retrieval
+                    </div>
+
+                    <div class="capability">
+                        <span>02</span>
+                        Grounded Analysis
+                    </div>
+
+                    <div class="capability">
+                        <span>03</span>
+                        Interview Copilot
+                    </div>
+
+                </div>
+
             </div>
-          </div>
 
-          <label for="resume-input" class="dropzone" id="dropzone">
-            <input type="file" id="resume-input" name="resume" accept=".pdf,.doc,.docx" hidden required>
-            <div class="dropzone-icon">
-              <i class="fa-solid fa-cloud-arrow-up"></i>
+        </section>
+
+
+        <!-- ============================================= -->
+        <!-- ANALYSIS INPUT -->
+        <!-- ============================================= -->
+
+        <section class="workspace">
+
+            <div class="section-heading">
+
+                <div>
+                    <div class="section-kicker">NEW ANALYSIS</div>
+
+                    <h2>
+                        Analyze a candidate
+                    </h2>
+
+                    <p>
+                        Upload a resume and provide the target role.
+                    </p>
+                </div>
+
+                <div class="pipeline-mini">
+
+                    <div class="pipeline-step active">
+                        <span>01</span>
+                        Resume
+                    </div>
+
+                    <div class="pipeline-arrow">→</div>
+
+                    <div class="pipeline-step">
+                        <span>02</span>
+                        Retrieval
+                    </div>
+
+                    <div class="pipeline-arrow">→</div>
+
+                    <div class="pipeline-step">
+                        <span>03</span>
+                        Intelligence
+                    </div>
+
+                </div>
+
             </div>
-            <p class="dropzone-title">Drag &amp; drop resume here</p>
-            <p class="dropzone-subtitle">or <span class="dropzone-browse">browse files</span> from your computer</p>
-            <div class="dropzone-file" id="dropzone-file">
-              <i class="fa-solid fa-file-lines"></i>
-              <span id="dropzone-filename">No file selected</span>
-              <button type="button" class="dropzone-remove" id="dropzone-remove" aria-label="Remove file">
-                <i class="fa-solid fa-xmark"></i>
-              </button>
+
+
+            <form
+                id="analysis-form"
+                action="/analyze"
+                method="post"
+                enctype="multipart/form-data"
+            >
+
+                <div class="input-grid">
+
+                    <!-- RESUME UPLOAD -->
+
+                    <div class="input-card">
+
+                        <div class="card-top">
+
+                            <div class="card-icon resume-icon">
+                                <span>PDF</span>
+                            </div>
+
+                            <div>
+                                <div class="card-label">CANDIDATE RESUME</div>
+                                <h3>Upload resume</h3>
+                            </div>
+
+                        </div>
+
+
+                        <label
+                            for="resume"
+                            class="drop-zone"
+                            id="drop-zone"
+                        >
+
+                            <input
+                                type="file"
+                                id="resume"
+                                name="resume"
+                                accept=".pdf"
+                                required
+                            >
+
+                            <div class="upload-icon">
+                                ↑
+                            </div>
+
+                            <div class="upload-title">
+                                Drop PDF here
+                            </div>
+
+                            <div class="upload-subtitle">
+                                or click to browse
+                            </div>
+
+                            <div class="file-name" id="file-name">
+                                PDF files only
+                            </div>
+
+                        </label>
+
+                    </div>
+
+
+                    <!-- JOB DESCRIPTION -->
+
+                    <div class="input-card">
+
+                        <div class="card-top">
+
+                            <div class="card-icon jd-icon">
+                                <span>JD</span>
+                            </div>
+
+                            <div>
+                                <div class="card-label">TARGET ROLE</div>
+                                <h3>Job description</h3>
+                            </div>
+
+                        </div>
+
+                        <div class="textarea-wrapper">
+
+                            <textarea
+                                name="job_description"
+                                id="job_description"
+                                placeholder="Paste the job description here...
+
+Example:
+Python, PySpark, AWS, SQL, Kafka, Snowflake..."
+                                required
+                            ></textarea>
+
+                            <div class="textarea-footer">
+                                <span>Role context</span>
+                                <span id="char-count">0 characters</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ANALYZE BUTTON -->
+
+                <div class="action-row">
+
+                    <div class="privacy-note">
+                        <span class="lock-icon">◇</span>
+                        Resume evidence is used only for this analysis.
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="analyze-button"
+                        id="analyze-button"
+                    >
+
+                        <span class="button-text">
+                            Analyze Candidate
+                        </span>
+
+                        <span class="button-arrow">
+                            →
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            <!-- ========================================= -->
+            <!-- HOW IT WORKS -->
+            <!-- ========================================= -->
+
+            <section class="how-section">
+
+                <div class="section-kicker">UNDER THE HOOD</div>
+
+                <h2>From document to intelligence.</h2>
+
+                <div class="architecture">
+
+                    <div class="architecture-node">
+
+                        <div class="node-number">01</div>
+
+                        <div>
+                            <strong>Parse</strong>
+                            <p>Extract resume text</p>
+                        </div>
+
+                    </div>
+
+                    <div class="architecture-connector"></div>
+
+                    <div class="architecture-node">
+
+                        <div class="node-number">02</div>
+
+                        <div>
+                            <strong>Embed</strong>
+                            <p>Create semantic vectors</p>
+                        </div>
+
+                    </div>
+
+                    <div class="architecture-connector"></div>
+
+                    <div class="architecture-node">
+
+                        <div class="node-number">03</div>
+
+                        <div>
+                            <strong>Retrieve</strong>
+                            <p>Search with FAISS</p>
+                        </div>
+
+                    </div>
+
+                    <div class="architecture-connector"></div>
+
+                    <div class="architecture-node">
+
+                        <div class="node-number">04</div>
+
+                        <div>
+                            <strong>Reason</strong>
+                            <p>Gemini + recruiter agent</p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </section>
+
+
+        {% else %}
+
+        <!-- ============================================= -->
+        <!-- RESULTS DASHBOARD -->
+        <!-- ============================================= -->
+
+        <section class="results-page">
+
+            <div class="results-header">
+
+                <div>
+
+                    <div class="eyebrow">
+                        <span class="eyebrow-line"></span>
+                        ANALYSIS COMPLETE
+                    </div>
+
+                    <h1>
+                        Recruiter intelligence
+                    </h1>
+
+                    <p>
+                        Evidence-grounded insights generated from the
+                        candidate resume and target role.
+                    </p>
+
+                </div>
+
+                <a href="/" class="new-analysis">
+                    + New Analysis
+                </a>
+
             </div>
-          </label>
-        </div>
 
-        <!-- Job Description Card -->
-        <div class="panel-card">
-          <div class="panel-header">
-            <div class="panel-icon panel-icon-alt"><i class="fa-solid fa-briefcase"></i></div>
-            <div>
-              <h3>Job Description</h3>
-              <p>Paste the role requirements &amp; responsibilities</p>
+
+            <!-- ========================================= -->
+            <!-- AI PIPELINE STATUS -->
+            <!-- ========================================= -->
+
+            <div class="ai-status-bar">
+
+                <div class="ai-status-left">
+
+                    <div class="live-orb">
+                        <span></span>
+                    </div>
+
+                    <div>
+                        <strong>AI recruiter analysis complete</strong>
+                        <small>Resume-grounded workflow</small>
+                    </div>
+
+                </div>
+
+
+                <div class="status-pipeline">
+
+                    <span class="complete">Resume</span>
+                    <b>→</b>
+
+                    <span class="complete">FAISS</span>
+                    <b>→</b>
+
+                    <span class="complete">Analysis</span>
+                    <b>→</b>
+
+                    <span class="complete">Interview</span>
+
+                </div>
+
             </div>
-          </div>
 
-          <div class="textarea-wrap">
-            <textarea
-              id="jd-input"
-              name="job_description"
-              placeholder="e.g. We're looking for a Senior Backend Engineer with 5+ years of experience in Python, FastAPI, distributed systems, and cloud infrastructure (AWS/GCP)..."
-              required></textarea>
-            <span class="textarea-counter"><span id="jd-count">0</span> characters</span>
-          </div>
+
+            <!-- ========================================= -->
+            <!-- CANDIDATE ANALYSIS -->
+            <!-- ========================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="section-title-row">
+
+                    <div>
+                        <div class="section-kicker">01 / CANDIDATE INTELLIGENCE</div>
+                        <h2>Technical strengths</h2>
+                    </div>
+
+                    <div class="section-badge">
+                        Resume grounded
+                    </div>
+
+                </div>
+
+
+                <div class="strength-grid">
+
+                    {% for strength in candidate_analysis.strengths %}
+
+                    <div class="strength-card">
+
+                        <div class="strength-marker">
+                            ✓
+                        </div>
+
+                        <div>
+                            <div class="strength-title">
+                                {{ strength }}
+                            </div>
+
+                            <div class="strength-label">
+                                EVIDENCED IN RESUME
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </section>
+
+
+            <!-- ========================================= -->
+            <!-- INVESTIGATION + ROLE -->
+            <!-- ========================================= -->
+
+            <section class="two-column">
+
+                <div class="dashboard-card investigation-card">
+
+                    <div class="card-heading">
+
+                        <div>
+                            <div class="section-kicker">
+                                INVESTIGATE
+                            </div>
+
+                            <h3>
+                                Areas to validate
+                            </h3>
+                        </div>
+
+                        <div class="warning-symbol">
+                            !
+                        </div>
+
+                    </div>
+
+
+                    <p class="card-description">
+                        These areas were identified for further
+                        investigation. They should not be interpreted
+                        as proof that the candidate lacks the capability.
+                    </p>
+
+
+                    <div class="investigation-list">
+
+                        {% for item in candidate_analysis.potential_areas_to_investigate %}
+
+                        <div class="investigation-item">
+
+                            <span class="investigation-number">
+                                {{ "%02d"|format(loop.index) }}
+                            </span>
+
+                            <span>
+                                {{ item }}
+                            </span>
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-card role-card">
+
+                    <div class="card-heading">
+
+                        <div>
+                            <div class="section-kicker">
+                                ROLE INTELLIGENCE
+                            </div>
+
+                            <h3>
+                                JD alignment
+                            </h3>
+                        </div>
+
+                        <div class="role-icon">
+                            ◎
+                        </div>
+
+                    </div>
+
+
+                    <p class="role-summary">
+                        {{ jd_analysis.summary }}
+                    </p>
+
+
+                    <div class="role-subsection">
+
+                        <div class="mini-heading">
+                            MATCHING STRENGTHS
+                        </div>
+
+                        {% for item in jd_analysis.matching_strengths %}
+
+                        <div class="role-item matched">
+                            <span>✓</span>
+                            {{ item }}
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <div class="role-subsection">
+
+                        <div class="mini-heading">
+                            REQUIREMENTS NOT EVIDENCED
+                        </div>
+
+                        {% for item in jd_analysis.requirements_not_evidenced %}
+
+                        <div class="role-item investigate">
+                            <span>!</span>
+                            {{ item }}
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ========================================= -->
+            <!-- EVIDENCE -->
+            <!-- ========================================= -->
+
+            <section class="dashboard-section evidence-section">
+
+                <div class="section-title-row">
+
+                    <div>
+
+                        <div class="section-kicker">
+                            02 / GROUNDING
+                        </div>
+
+                        <h2>
+                            Evidence used by the AI
+                        </h2>
+
+                        <p class="section-description">
+                            Resume passages retrieved through semantic search.
+                        </p>
+
+                    </div>
+
+                    <div class="evidence-count">
+                        {{ sources|length }} retrieved
+                    </div>
+
+                </div>
+
+
+                <div class="evidence-grid">
+
+                    {% for source in sources %}
+
+                    <div class="evidence-card">
+
+                        <div class="evidence-top">
+
+                            <span>
+                                EVIDENCE {{ "%02d"|format(loop.index) }}
+                            </span>
+
+                            <span class="distance">
+                                Distance {{ "%.3f"|format(source.distance) }}
+                            </span>
+
+                        </div>
+
+                        <p>
+                            {{ source.content }}
+                        </p>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </section>
+
+
+            <!-- ========================================= -->
+            <!-- INTERVIEW COPILOT -->
+            <!-- ========================================= -->
+
+            <section class="dashboard-section interview-section">
+
+                <div class="section-title-row">
+
+                    <div>
+
+                        <div class="section-kicker">
+                            03 / INTERVIEW COPILOT
+                        </div>
+
+                        <h2>
+                            Personalized interview questions
+                        </h2>
+
+                        <p class="section-description">
+                            Questions generated from the candidate's
+                            evidence and the target role.
+                        </p>
+
+                    </div>
+
+                    <div class="ai-pill">
+                        ✦ AI GENERATED
+                    </div>
+
+                </div>
+
+
+                <div class="questions-grid">
+
+                    {% for item in interview_questions.questions %}
+
+                    <article class="question-card">
+
+                        <div class="question-number">
+                            {{ "%02d"|format(loop.index) }}
+                        </div>
+
+                        <div class="question-content">
+
+                            <div class="question-topic">
+                                {{ item.topic }}
+                            </div>
+
+                            <h3>
+                                {{ item.question }}
+                            </h3>
+
+                            <div class="question-reason">
+
+                                <span>WHY ASK</span>
+
+                                {{ item.reason }}
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                    {% endfor %}
+
+                </div>
+
+            </section>
+
+
+            <!-- ========================================= -->
+            <!-- FINAL ARCHITECTURE -->
+            <!-- ========================================= -->
+
+            <section class="workflow-section">
+
+                <div class="section-kicker">
+                    SYSTEM WORKFLOW
+                </div>
+
+                <div class="workflow-line">
+
+                    <div class="workflow-item">
+                        <span>01</span>
+                        Resume
+                    </div>
+
+                    <div class="workflow-line-arrow">→</div>
+
+                    <div class="workflow-item">
+                        <span>02</span>
+                        Embeddings
+                    </div>
+
+                    <div class="workflow-line-arrow">→</div>
+
+                    <div class="workflow-item">
+                        <span>03</span>
+                        FAISS
+                    </div>
+
+                    <div class="workflow-line-arrow">→</div>
+
+                    <div class="workflow-item">
+                        <span>04</span>
+                        Gemini
+                    </div>
+
+                    <div class="workflow-line-arrow">→</div>
+
+                    <div class="workflow-item">
+                        <span>05</span>
+                        Agent
+                    </div>
+
+                </div>
+
+            </section>
+
+
+        </section>
+
+        {% endif %}
+
+    </main>
+
+
+    <!-- ============================================= -->
+    <!-- FOOTER -->
+    <!-- ============================================= -->
+
+    <footer class="footer">
+
+        <div>
+            TalentIQ · AI Talent Intelligence Platform
         </div>
 
-      </div>
-
-      <div class="analyze-bar">
-        <div class="analyze-hint">
-          <i class="fa-solid fa-shield-halved"></i>
-          Resumes are parsed securely and never stored beyond this session.
-        </div>
-        <button type="submit" class="btn-analyze" id="analyze-btn">
-          <span class="btn-analyze-content">
-            <i class="fa-solid fa-wand-magic-sparkles"></i>
-            Analyze Resume
-          </span>
-          <span class="btn-analyze-loading">
-            <span class="spinner"></span>
-            Analyzing…
-          </span>
-        </button>
-      </div>
-    </form>
-
-  </div>
-</section>
-
-<!-- ================= DASHBOARD (RESULTS) ================= -->
-{% if resume %}
-<section class="dashboard-section" id="dashboard-section">
-  <div class="section-inner">
-
-    <div class="dashboard-heading">
-      <div>
-        <span class="eyebrow eyebrow-dark"><i class="fa-solid fa-chart-simple"></i> Analysis Complete</span>
-        <h2>Candidate Intelligence Report</h2>
-      </div>
-      <button class="btn-secondary" onclick="window.print()">
-        <i class="fa-solid fa-download"></i> Export Report
-      </button>
-    </div>
-
-    <div class="dashboard-grid">
-
-      <!-- Candidate Details -->
-      <div class="card card-candidate">
-        <div class="card-header">
-          <div class="card-icon icon-blue"><i class="fa-solid fa-user"></i></div>
-          <h3>Candidate Details</h3>
-        </div>
-        <div class="candidate-profile">
-          <div class="candidate-avatar">{{ resume.name[0]|upper if resume.name else "?" }}</div>
-          <div class="candidate-info">
-            <h4>{{ resume.name or "Unknown Candidate" }}</h4>
-            <p class="candidate-meta"><i class="fa-solid fa-envelope"></i> {{ resume.email or "Not found" }}</p>
-            <p class="candidate-meta"><i class="fa-solid fa-phone"></i> {{ resume.phone or "Not found" }}</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Resume Score -->
-      <div class="card card-score">
-        <div class="card-header">
-          <div class="card-icon icon-amber"><i class="fa-solid fa-gauge-high"></i></div>
-          <h3>Resume Score</h3>
-        </div>
-        <div class="score-display">
-          <span class="score-value" data-score="{{ scores.overall_score }}">{{ scores.overall_score }}</span>
-          <span class="score-max">/ 100</span>
-        </div>
-        <div class="progress-track">
-          <div class="progress-fill" id="score-progress-fill" style="width:0%;" data-target="{{ scores.overall_score }}"></div>
-        </div>
-        <p class="score-label" id="score-label">Match quality</p>
-      </div>
-
-      <!-- Hiring Prediction -->
-      <div class="card card-prediction">
-        <div class="card-header">
-          <div class="card-icon icon-green"><i class="fa-solid fa-brain"></i></div>
-          <h3>Hiring Prediction</h3>
+        <div>
+            Semantic Retrieval · RAG · Tool Calling · AI Agents
         </div>
 
-        <div class="prediction-body">
-          <div class="ring-wrap">
-            <svg class="score-ring" viewBox="0 0 120 120">
-              <circle class="ring-track" cx="60" cy="60" r="52"></circle>
-              <circle class="ring-progress" id="prediction-ring" cx="60" cy="60" r="52"
-                data-target="{{ prediction.selection_probability }}"></circle>
-            </svg>
-            <div class="ring-center">
-              <span class="ring-value" id="ring-value">0%</span>
-              <span class="ring-caption">probability</span>
-            </div>
-          </div>
+    </footer>
 
-          <div class="prediction-meta">
-            <span class="prediction-tag {{ 'tag-positive' if prediction.prediction == 'Selected' or prediction.prediction == 1 or prediction.prediction == 'Yes' else 'tag-neutral' }}">
-              <i class="fa-solid fa-circle-check"></i>
-              {{ prediction.prediction }}
-            </span>
-            <p>Selection probability based on Random Forest model trained on historical hiring outcomes.</p>
-          </div>
-        </div>
-      </div>
+</div>
 
-      <!-- Matched Skills -->
-      <div class="card card-skills">
-        <div class="card-header">
-          <div class="card-icon icon-green"><i class="fa-solid fa-check-double"></i></div>
-          <h3>Matched Skills</h3>
-          <span class="card-count">{{ match.matched_skills|length }}</span>
-        </div>
-        <div class="badge-list">
-          {% for skill in match.matched_skills %}
-          <span class="badge badge-matched"><i class="fa-solid fa-check"></i> {{ skill }}</span>
-          {% else %}
-          <p class="empty-note">No matched skills found.</p>
-          {% endfor %}
-        </div>
-      </div>
 
-      <!-- Missing Skills -->
-      <div class="card card-skills">
-        <div class="card-header">
-          <div class="card-icon icon-red"><i class="fa-solid fa-triangle-exclamation"></i></div>
-          <h3>Missing Skills</h3>
-          <span class="card-count">{{ match.missing_skills|length }}</span>
-        </div>
-        <div class="badge-list">
-          {% for skill in match.missing_skills %}
-          <span class="badge badge-missing"><i class="fa-solid fa-xmark"></i> {{ skill }}</span>
-          {% else %}
-          <p class="empty-note">No gaps detected. Full coverage.</p>
-          {% endfor %}
-        </div>
-      </div>
-
-      <!-- AI Recruiter Summary -->
-      <div class="card card-summary">
-        <div class="card-header">
-          <div class="card-icon icon-blue"><i class="fa-solid fa-robot"></i></div>
-          <h3>AI Recruiter Summary</h3>
-        </div>
-        <div class="summary-body">
-          <p>{{ summary }}</p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-{% endif %}
-
-<!-- ================= FOOTER ================= -->
-<footer class="footer" id="footer">
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <span class="brand-mark"><i class="fa-solid fa-radar"></i></span>
-      <span class="brand-name">Talentry<span class="brand-dot">.ai</span></span>
-    </div>
-    <p class="footer-text">AI-powered resume intelligence for modern hiring teams.</p>
-    <div class="footer-links">
-      <a href="#"><i class="fa-brands fa-github"></i></a>
-      <a href="#"><i class="fa-brands fa-linkedin"></i></a>
-      <a href="#"><i class="fa-solid fa-envelope"></i></a>
-    </div>
-    <p class="footer-copyright">&copy; 2026 Talentry.ai — Built with FastAPI &amp; Random Forest ML.</p>
-  </div>
-</footer>
+<!-- ============================================= -->
+<!-- JAVASCRIPT -->
+<!-- ============================================= -->
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
 
-  /* ---------- Drag & Drop Upload ---------- */
-  const dropzone = document.getElementById('dropzone');
-  const fileInput = document.getElementById('resume-input');
-  const fileNameEl = document.getElementById('dropzone-filename');
-  const fileDisplay = document.getElementById('dropzone-file');
-  const removeBtn = document.getElementById('dropzone-remove');
+    const resumeInput = document.getElementById("resume");
+    const fileName = document.getElementById("file-name");
+    const dropZone = document.getElementById("drop-zone");
 
-  function showFile(file) {
-    if (!file) return;
-    fileNameEl.textContent = file.name;
-    fileDisplay.classList.add('active');
-    dropzone.classList.add('has-file');
-  }
+    if (resumeInput) {
 
-  fileInput.addEventListener('change', function () {
-    if (fileInput.files.length) showFile(fileInput.files[0]);
-  });
+        resumeInput.addEventListener("change", function () {
 
-  ['dragenter', 'dragover'].forEach(evt => {
-    dropzone.addEventListener(evt, function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      dropzone.classList.add('dragging');
-    });
-  });
+            if (this.files.length > 0) {
 
-  ['dragleave', 'drop'].forEach(evt => {
-    dropzone.addEventListener(evt, function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      dropzone.classList.remove('dragging');
-    });
-  });
+                const file = this.files[0];
 
-  dropzone.addEventListener('drop', function (e) {
-    const files = e.dataTransfer.files;
-    if (files.length) {
-      fileInput.files = files;
-      showFile(files[0]);
+                fileName.textContent = file.name;
+                fileName.classList.add("selected");
+
+                dropZone.classList.add("has-file");
+
+            }
+
+        });
+
+
+        dropZone.addEventListener("dragover", function (event) {
+
+            event.preventDefault();
+
+            dropZone.classList.add("dragging");
+
+        });
+
+
+        dropZone.addEventListener("dragleave", function () {
+
+            dropZone.classList.remove("dragging");
+
+        });
+
+
+        dropZone.addEventListener("drop", function () {
+
+            dropZone.classList.remove("dragging");
+
+        });
+
     }
-  });
 
-  removeBtn.addEventListener('click', function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    fileInput.value = '';
-    fileDisplay.classList.remove('active');
-    dropzone.classList.remove('has-file');
-  });
 
-  /* ---------- Character Counter ---------- */
-  const jdInput = document.getElementById('jd-input');
-  const jdCount = document.getElementById('jd-count');
-  if (jdInput) {
-    jdInput.addEventListener('input', function () {
-      jdCount.textContent = jdInput.value.length;
-    });
-  }
+    const textarea = document.getElementById("job_description");
+    const charCount = document.getElementById("char-count");
 
-  /* ---------- Analyze Button Loading State ---------- */
-  const form = document.getElementById('analyze-form');
-  const analyzeBtn = document.getElementById('analyze-btn');
-  if (form) {
-    form.addEventListener('submit', function () {
-      analyzeBtn.classList.add('is-loading');
-      analyzeBtn.disabled = true;
-    });
-  }
+    if (textarea) {
 
-  /* ---------- Animate Score Progress Bar ---------- */
-  const progressFill = document.getElementById('score-progress-fill');
-  const scoreLabel = document.getElementById('score-label');
-  if (progressFill) {
-    const target = parseFloat(progressFill.dataset.target) || 0;
-    requestAnimationFrame(() => {
-      setTimeout(() => {
-        progressFill.style.width = Math.min(target, 100) + '%';
-      }, 200);
-    });
-    if (target >= 80) scoreLabel.textContent = 'Excellent match quality';
-    else if (target >= 60) scoreLabel.textContent = 'Strong match quality';
-    else if (target >= 40) scoreLabel.textContent = 'Moderate match quality';
-    else scoreLabel.textContent = 'Low match quality';
-  }
+        textarea.addEventListener("input", function () {
 
-  /* ---------- Animate Prediction Ring ---------- */
-  const ring = document.getElementById('prediction-ring');
-  const ringValue = document.getElementById('ring-value');
-  if (ring) {
-    let target = parseFloat(ring.dataset.target) || 0;
-    // Normalize: accept either 0-1 or 0-100 input
-    if (target <= 1) target = target * 100;
-    target = Math.max(0, Math.min(target, 100));
+            const count = this.value.length;
 
-    const radius = 52;
-    const circumference = 2 * Math.PI * radius;
-    ring.style.strokeDasharray = circumference;
-    ring.style.strokeDashoffset = circumference;
+            charCount.textContent =
+                count + (count === 1 ? " character" : " characters");
 
-    requestAnimationFrame(() => {
-      setTimeout(() => {
-        const offset = circumference - (target / 100) * circumference;
-        ring.style.strokeDashoffset = offset;
+        });
 
-        let current = 0;
-        const duration = 900;
-        const startTime = performance.now();
-        function tick(now) {
-          const progress = Math.min((now - startTime) / duration, 1);
-          current = progress * target;
-          ringValue.textContent = Math.round(current) + '%';
-          if (progress < 1) requestAnimationFrame(tick);
-        }
-        requestAnimationFrame(tick);
-      }, 250);
-    });
-  }
+    }
 
-  /* ---------- Smooth Scroll to Dashboard on Load ---------- */
-  {% if resume %}
-  const dashboardSection = document.getElementById('dashboard-section');
-  if (dashboardSection) {
-    setTimeout(() => {
-      dashboardSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 300);
-  }
-  {% endif %}
 
-});
+    const form = document.getElementById("analysis-form");
+    const button = document.getElementById("analyze-button");
+
+    if (form && button) {
+
+        form.addEventListener("submit", function () {
+
+            button.disabled = true;
+
+            button.innerHTML = `
+                <span class="loading-spinner"></span>
+                <span>Analyzing candidate...</span>
+            `;
+
+        });
+
+    }
+
 </script>
 
 </body>
