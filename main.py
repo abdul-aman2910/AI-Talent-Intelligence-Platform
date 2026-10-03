@@ -10,7 +10,6 @@ import os
 
 from src.resume_parser import ResumeParser
 from src.chunker import TextChunker
-from src.retriever import ResumeRetriever
 from src.tools import ResumeTools
 from src.agent import RecruiterAgent
 from src.jd_analyzer import JDAnalyzer
@@ -129,6 +128,8 @@ async def analyze(
     # --------------------------------------------------
     # 4. Create semantic retriever
     # --------------------------------------------------
+
+    from src.retriever import ResumeRetriever
 
     retriever = ResumeRetriever(
         chunks
